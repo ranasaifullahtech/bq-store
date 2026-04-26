@@ -2,10 +2,186 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BQ Store — Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="BQ Store admin — product and category management." />
+    <meta name="theme-color" content="#111111" />
+    <title>BQ Store — Admin Login</title>
+    <link rel="icon" type="image/svg+xml" href="/src/assets/icons/favicon.svg" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              surface: '#FAFAFA',
+              'surface-raised': '#FFFFFF',
+              'text-primary': '#111827',
+              'text-muted': '#6B7280',
+              border: '#E5E7EB',
+              primary: { DEFAULT: '#111111', hover: '#000000' },
+              danger: { DEFAULT: '#DC2626', soft: '#FEE2E2' },
+              success: { DEFAULT: '#16A34A', soft: '#DCFCE7' }
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
+            },
+            fontSize: {
+              display: ['2.5rem', { lineHeight: '3rem', letterSpacing: '-0.02em', fontWeight: 600 }],
+              h1: ['1.75rem', { lineHeight: '2.25rem', fontWeight: 600 }],
+              h2: ['1.25rem', { lineHeight: '1.75rem', fontWeight: 600 }]
+            },
+            borderRadius: {
+              sm: '6px',
+              md: '10px',
+              lg: '16px'
+            },
+            boxShadow: {
+              card: '0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04)'
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
-  <body>
-    <h1>BQ Store — setup verified.</h1>
+  <body class="bg-surface font-sans text-text-primary antialiased">
+    <main class="min-h-screen grid lg:grid-cols-[420px_1fr]">
+      <section class="hidden lg:flex flex-col justify-between p-10 bg-white border-r border-border"
+               aria-labelledby="brand-title">
+        <div class="flex items-center gap-3">
+          <div class="size-8 rounded-md bg-black/5 grid place-items-center">
+            <img src="/src/assets/icons/logo.svg" alt="" class="size-4" />
+          </div>
+          <span class="text-sm font-semibold tracking-wide">BQ Store</span>
+        </div>
+
+        <div>
+          <p class="text-xs font-medium uppercase tracking-widest text-text-muted mb-4">
+            Admin Console
+          </p>
+          <h1 id="brand-title" class="text-display mb-4">
+            Manage your<br />store with ease.
+          </h1>
+          <p class="text-sm text-text-muted max-w-[32ch]">
+            Products and categories. One console. No noise.
+          </p>
+        </div>
+
+        <p class="text-xs text-text-muted/60">
+          &copy; 2025 BQ Store
+        </p>
+      </section>
+
+      <section class="flex items-center justify-center p-6"
+               aria-labelledby="login-title">
+        <div class="w-full max-w-sm">
+          <h2 id="login-title" class="text-h1 mb-1">Sign in</h2>
+          <p class="text-sm text-text-muted mb-8">
+            Enter your credentials to access the admin panel.
+          </p>
+
+          <div id="login-alert" role="alert" hidden
+               class="mb-4 rounded-md bg-danger-soft text-danger px-3 py-2 text-sm"></div>
+
+          <form id="login-form" class="space-y-4" novalidate>
+            <fieldset class="space-y-4 disabled:opacity-60">
+              <legend class="visually-hidden">Credentials</legend>
+
+              <div>
+                <label for="email"
+                       class="block text-xs font-medium uppercase tracking-wide text-text-muted mb-1.5">
+                  Email
+                </label>
+                <input
+                  id="email" name="email" type="email" required
+                  autocomplete="email"
+                  aria-describedby="email-error"
+                  class="w-full rounded-sm border border-border bg-white px-3.5 py-3 text-sm
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20
+                         focus-visible:border-primary/40 transition"
+                  placeholder="admin@bqstore.com"
+                />
+                <p id="email-error" class="mt-1.5 text-xs text-danger" hidden></p>
+              </div>
+
+              <div>
+                <label for="password"
+                       class="block text-xs font-medium uppercase tracking-wide text-text-muted mb-1.5">
+                  Password
+                </label>
+                <div class="relative">
+                  <input
+                    id="password" name="password" type="password" required minlength="6"
+                    autocomplete="current-password"
+                    aria-describedby="password-error"
+                    class="w-full rounded-sm border border-border bg-white px-3.5 py-3 text-sm pr-12
+                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20
+                           focus-visible:border-primary/40 transition"
+                    placeholder="••••••••"
+                  />
+                  <button type="button" id="toggle-password"
+                          class="absolute inset-y-0 right-2 px-2 text-text-muted hover:text-text-primary"
+                          aria-label="Show password" aria-pressed="false">
+                    <svg aria-hidden="true" class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </button>
+                </div>
+                <p id="password-error" class="mt-1.5 text-xs text-danger" hidden></p>
+              </div>
+            </fieldset>
+
+            <button
+              type="submit" id="submit-btn"
+              class="w-full rounded-md bg-primary px-5 py-3 text-sm font-medium text-white
+                     hover:bg-primary-hover
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30
+                     disabled:opacity-60 disabled:cursor-not-allowed transition">
+              <span id="submit-label">Sign in</span>
+            </button>
+
+            <p id="form-status"
+               class="text-xs text-text-muted text-center min-h-[1rem]"
+               role="status" aria-live="polite"></p>
+          </form>
+          <p class="text-xs text-text-muted text-center mt-4">Press Enter to sign in.</p>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast-region" class="fixed bottom-4 right-4 space-y-2 w-[calc(100%-2rem)] max-w-sm pointer-events-none z-50"
+         role="status" aria-live="polite"></div>
+
+    <style>
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 8px;
+        padding: 8px 12px;
+        background: #111;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+      }
+      .skip-link:focus {
+        top: 8px;
+      }
+    </style>
+
+    <script type="module" src="/src/js/main.js"></script>
   </body>
 </html>

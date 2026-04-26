@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en" data-version="1.0.0">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="BQ Store admin dashboard." />
+    <meta name="theme-color" content="#111111" />
+    <title>BQ Store — Products</title>
+    <link rel="icon" type="image/svg+xml" href="/src/assets/icons/favicon.svg" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              surface: '#FAFAFA',
+              'surface-raised': '#FFFFFF',
+              'text-primary': '#111827',
+              'text-muted': '#6B7280',
+              border: '#E5E7EB',
+              primary: { DEFAULT: '#111111', hover: '#000000' },
+              danger: { DEFAULT: '#DC2626', soft: '#FEE2E2' },
+              success: { DEFAULT: '#16A34A', soft: '#DCFCE7' }
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
+            },
+            fontSize: {
+              display: ['2.5rem', { lineHeight: '3rem', letterSpacing: '-0.02em', fontWeight: 600 }],
+              h1: ['1.75rem', { lineHeight: '2.25rem', fontWeight: 600 }],
+              h2: ['1.25rem', { lineHeight: '1.75rem', fontWeight: 600 }]
+            },
+            borderRadius: {
+              sm: '6px',
+              md: '10px',
+              lg: '16px'
+            },
+            boxShadow: {
+              card: '0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04)'
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-surface text-text-primary font-sans antialiased">
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="min-h-screen grid grid-rows-[auto_1fr] lg:grid-cols-[240px_1fr] lg:grid-rows-[auto_1fr]">
+      <header class="lg:col-span-2 border-b border-border bg-white">
+        <div class="h-14 px-4 md:px-6 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <button type="button" id="sidebar-toggle" class="lg:hidden p-2 -ml-2"
+                    aria-controls="sidebar" aria-expanded="false" aria-label="Open menu">
+              <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <div class="flex items-center gap-2">
+              <img src="/src/assets/icons/logo.svg" alt="" class="size-6" />
+              <span class="font-semibold">BQ Store</span>
+            </div>
+          </div>
+          <nav aria-label="User menu">
+            <button type="button" id="user-menu-btn"
+                    class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-surface"
+                    aria-haspopup="menu" aria-expanded="false">
+              <span id="user-email" class="text-sm text-text-muted">admin@bqstore.com</span>
+              <svg class="size-3" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </nav>
+        </div>
+      </header>
+
+      <aside id="sidebar"
+             class="hidden lg:block border-r border-border bg-white p-4"
+             aria-label="Primary">
+        <nav>
+          <ul class="space-y-1">
+            <li>
+              <a href="#/products" data-view="products"
+                 class="nav-link flex items-center gap-3 px-3 py-2 rounded-md text-sm text-text-muted hover:bg-surface [&.is-active]:bg-surface [&.is-active]:text-text-primary">
+                <svg aria-hidden="true" class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4l8 4m-8-4l8 4" />
+                </svg>
+                Products
+              </a>
+            </li>
+            <li>
+              <a href="#/categories" data-view="categories"
+                 class="nav-link flex items-center gap-3 px-3 py-2 rounded-md text-sm text-text-muted hover:bg-surface [&.is-active]:bg-surface [&.is-active]:text-text-primary">
+                <svg aria-hidden="true" class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+                Categories
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <button type="button" id="logout-btn"
+                class="mt-8 w-full text-left px-3 py-2 text-sm text-danger hover:bg-danger-soft rounded-md">
+          Sign out
+        </button>
+      </aside>
+
+      <main id="main" tabindex="-1" class="min-w-0">
+        <div class="mx-auto max-w-7xl px-4 md:px-6 py-6 md:py-8">
+          <section id="view-products" class="view" aria-labelledby="products-title">
+            <header class="view-header flex flex-wrap items-center justify-between gap-4 mb-6">
+              <div>
+                <h1 id="products-title" class="text-h1">Products</h1>
+                <p class="text-sm text-text-muted">Manage your catalog.</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="visually-hidden" for="products-search">Search products</label>
+                <input id="products-search" type="search" placeholder="Search..." class="w-full rounded-sm border border-border bg-white px-3.5 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 transition sm:w-56" />
+                <button id="add-product-btn" class="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 transition">Add product</button>
+              </div>
+            </header>
+            <div id="products-list"
+                 role="list"
+                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            </div>
+          </section>
+
+          <section id="view-categories" class="view" aria-labelledby="categories-title" hidden>
+            <header class="view-header flex items-center justify-between gap-4 mb-6">
+              <div>
+                <h1 id="categories-title" class="text-h1">Categories</h1>
+                <p class="text-sm text-text-muted">Organize your products.</p>
+              </div>
+              <button id="add-category-btn" class="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 transition">Add category</button>
+            </header>
+
+            <div class="overflow-x-auto rounded-md border border-border bg-white">
+              <table id="categories-table" class="min-w-full text-sm">
+                <thead class="text-left text-text-muted border-b border-border">
+                  <tr>
+                    <th class="px-4 py-3 font-medium">Name</th>
+                    <th class="px-4 py-3 font-medium">Slug</th>
+                    <th class="px-4 py-3 font-medium">Products</th>
+                    <th class="px-4 py-3 font-medium w-24">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="categories-list"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div id="modal-root"></div>
+    <div id="toast-region" class="fixed bottom-4 right-4 space-y-2 w-[calc(100%-2rem)] max-w-sm pointer-events-none z-50"
+         role="status" aria-live="polite"></div>
+
+    <footer class="border-t border-border bg-white px-6 py-4 text-center text-xs text-text-muted">
+      <a href="https://github.com/ranasaifullahtech/bq-store" target="_blank" rel="noopener" class="hover:text-text-primary">BQ Store</a> &middot; v<span id="app-version">1.0.0</span>
+    </footer>
+
+    <style>
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 8px;
+        padding: 8px 12px;
+        background: #111;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        z-index: 100;
+      }
+      .skip-link:focus {
+        top: 8px;
+      }
+      .auth-loading {
+        opacity: 0.4;
+        pointer-events: none;
+      }
+      input:focus, button:focus {
+        outline: 2px solid rgba(17, 17, 17, 0.2);
+        outline-offset: 2px;
+      }
+    </style>
+
+    <script type="module" src="/src/js/dashboard.js"></script>
+  </body>
+</html>

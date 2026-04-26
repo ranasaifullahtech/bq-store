@@ -1,100 +1,101 @@
-# BQ Store — Admin Dashboard
+# BQ Store
 
-BQ Store is a frontend-only admin dashboard for managing a watch store's products and categories. It uses Firebase Authentication for admin login and Cloud Firestore for data persistence. The app consists of two HTML pages: a public login page and a protected dashboard with Products and Categories management views.
+A minimal ecommerce admin dashboard. Two pages: login and dashboard. Two CRUD resources: products and categories. Built with HTML, Tailwind CSS, vanilla JavaScript, and Firebase.
 
-## Pages and views
+## Live Demo
 
-- `index.html` — Public login page for admin authentication
-- `dashboard.html` — Protected admin workspace with:
-  - Products view (list, create, edit, delete products)
-  - Categories view (list, create, edit, delete categories)
-- `404.html` — Fallback for unknown routes
+→ https://bq-store-demo.web.app
 
-## Data Model
+## Tech Stack
 
-```
-Firestore (logical view)
-├── categories/
-│   └── {categoryId}
-│       ├── name: string
-│       ├── slug: string
-│       └── createdAt: timestamp
-└── products/
-    └── {productId}
-        ├── name: string
-        ├── description: string
-        ├── price: number           // in paisa (smallest currency unit)
-        ├── imageUrl: string
-        ├── categoryId: string       // reference to categories/{id}
-        ├── stock: number
-        └── createdAt: timestamp
-```
+- HTML5
+- Tailwind CSS v4 (CDN for dev)
+- Vanilla JavaScript (ES modules)
+- Firebase Auth
+- Cloud Firestore
 
-## Folder Layout
-
-```
-bq-store/
-├── index.html                  # Login
-├── dashboard.html              # Admin shell (sidebar + topbar + view slot)
-├── 404.html                    # Fallback for unknown routes
-├── src/
-│   ├── css/
-│   │   └── tailwind.css
-│   ├── js/
-│   │   ├── main.js             # Login page entry
-│   │   ├── dashboard.js        # Dashboard entry (routes + init)
-│   │   ├── auth.js            # Firebase Auth wrapper
-│   │   ├── firestore.js       # Firestore wrapper (getAll, create, update, delete)
-│   │   ├── products.js        # Products view: renderList, openForm, handleSubmit
-│   │   ├── categories.js      # Categories view: same shape as products.js
-│   │   ├── ui.js             # DOM helpers: $, $$, el, toast
-│   │   └── config.js         # Reads Firebase config, initializes SDK
-│   └── assets/
-│       ├── icons/            # SVGs (optimized)
-│       └── images/           # Placeholder product imagery
-├── design/
-│   └── figma-export/         # Screenshots / exports from Figma
-├── firestore.rules            # Security rules
-├── .env.example             # Placeholder config
-├── .gitignore
-├── README.md
-└── LICENSE
-```
-
-## Local Run Instructions
+## Local Setup
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/YOUR-USERNAME/bq-store.git
+   git clone https://github.com/ranasaifullahtech/bq-store.git
    cd bq-store
    ```
 
 2. Open with Live Server:
-   - Right-click `index.html` in VS Code → Open with Live Server
-   - Or use the Live Server extension (default port: 5500)
+   - In VS Code, right-click `index.html` → "Open with Live Server"
+   - Or use a local server: `npx serve .`
 
-3. Set up Firebase config:
-   ```bash
-   cp .env.example .env
-   ```
-   Fill in your Firebase config values in `.env`.
+3. Set up Firebase (optional for full functionality):
+   - Create a project at https://console.firebase.google.com
+   - Enable Authentication → Email/Password
+   - Create Firestore Database (start in production mode)
+   - Edit `src/js/config.js` with your Firebase config
+   - Add your domain to "Authorized domains" in Firebase Console
 
-## Design Inspiration
+4. Create admin user:
+   - Go to Authentication → Users → Add user
+   - Use email: admin@bqstore.com, password: admin123
 
-TBD after Module 03.
+## Deployment
 
-## Happy Path and Failure Paths
+### Option 1: Vercel (Recommended)
 
-When a user adds a new product, the following steps occur:
-1. User clicks "Add Product" button, which opens a modal form
-2. User fills in product details (name, description, price, category, stock, image) and clicks Save
-3. JavaScript validates all required fields; if validation fails, show inline error messages
-4. On success, JavaScript calls Firestore `addDoc()` to create the product document
-5. If network failure occurs, display a toast error message: "Failed to save. Check your connection."
-6. If permission denied (user not authenticated), redirect to login page
-7. On Firestore success, the new product appears in the list via re-fetch
+1. Push to GitHub
+2. Go to https://vercel.com and import the repo
+3. Configure:
+   - Framework Preset: Other
+   - Build Command: (leave empty or use npm run build)
+   - Output Directory: .
+4. Click Deploy
 
-Three failure points:
-- Network failure → show toast: "Failed to save. Check your connection."
-- Validation failure → show inline error messages under each invalid field
-- Permission denied → redirect to index.html login page
+### Option 2: Firebase Hosting
+
+```bash
+npm install -g firebase-tools
+firebase login
+firebase init hosting
+firebase deploy
+```
+
+## Data Model
+
+Firestore collections:
+
+```
+categories/{categoryId}
+  - name: string
+  - slug: string
+  - createdAt: timestamp
+
+products/{productId}
+  - name: string
+  - description: string
+  - price: number (in paisa/cents)
+  - imageUrl: string
+  - categoryId: string
+  - stock: number
+  - createdAt: timestamp
+```
+
+## Features
+
+- ✅ Login with validation and lockout after 5 failed attempts
+- ✅ Products CRUD (create, read, update, delete)
+- ✅ Categories CRUD with referential integrity
+- ✅ Real-time search filtering
+- ✅ Real-time updates via Firestore
+- ✅ Offline support with local cache
+- ✅ Responsive design (mobile + desktop)
+- ✅ Keyboard accessible
+
+## What I Would Do Next
+
+- Product image uploads to Firebase Storage
+- Role-based access control
+- Offline write queue with sync on reconnect
+- Email notifications for new orders
+
+## License
+
+MIT
